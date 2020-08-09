@@ -5,23 +5,26 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MVC_EF_Start.DataAccess;
 
+
 namespace MVC_EF_Start
 {
   public class Startup
   {
-    public Startup(IConfiguration configuration)
-    {
-      Configuration = configuration;
-    }
+        public Startup(IConfiguration configuration) => this.configuration = configuration;
 
-    public IConfiguration Configuration { get; }
+        private readonly IConfiguration configuration;
 
-    // This method gets called by the runtime. Use this method to add services to the container.
-    // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-    public void ConfigureServices(IServiceCollection services)
+        public IConfiguration GetConfiguration()
+        {
+            return configuration;
+        }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public void ConfigureServices(IServiceCollection services)
     {
       // Setup EF connection
-      services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:IEXTrading:ConnectionString"]));
+      services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(GetConfiguration()["Data:IEXTrading:ConnectionString"]));
 
       // added from MVC template
       services.AddMvc();
