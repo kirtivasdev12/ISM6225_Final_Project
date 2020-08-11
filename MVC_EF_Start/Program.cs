@@ -12,7 +12,7 @@ namespace MVC_EF_Start
 {
   public class Program
   {
-    public static void Main(string[] args)
+        public static void Main(string[] args)
     {
       BuildWebHost(args).Run();
     }

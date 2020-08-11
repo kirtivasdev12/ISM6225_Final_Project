@@ -25,8 +25,8 @@ namespace MVC_EF_Start.Controllers
 
     public async Task<ViewResult> DatabaseOperations()
     {
-      // CREATE operation
-      Company MyCompany = new Company();
+            // CREATE operation
+            Company MyCompany = new Company();
       MyCompany.symbol = "MCOB";
       MyCompany.name = "ISM";
       MyCompany.date = "ISM";
@@ -118,4 +118,3 @@ namespace MVC_EF_Start.Controllers
 
   }
 }
-/*adding a change*\

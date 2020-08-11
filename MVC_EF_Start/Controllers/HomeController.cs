@@ -43,5 +43,9 @@ namespace MVC_EF_Start
         {
             return View();
         }
+        public IActionResult Chart()
+        {
+            return View();
+        }
     }
 }
