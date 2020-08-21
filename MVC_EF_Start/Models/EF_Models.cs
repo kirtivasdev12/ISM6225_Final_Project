@@ -1,40 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+
 
 namespace MVC_EF_Start.Models
 {
-  public class Company
-  {
-    [Key]
-    public string symbol { get; set; }
-    public string name { get; set; }
-    public string date { get; set; }
-    public bool isEnabled { get; set; }
-    public string type { get; set; }
-    public string iexId { get; set; }
-    public List<Quote> Quotes { get; set; }
-  }
+    public class Reviewer // Hold reviewer details
+    {
+        [Key]
+        public int reviewer_id { get; set; }
+        public string f_name { get; set; }
+        public string l_name { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
 
-  public class Quote
-  {
-    public int QuoteId { get; set; }
-    public string date { get; set; }
-    public float open { get; set; }
-    public float high { get; set; }
-    public float low { get; set; }
-    public float close { get; set; }
-    public int volume { get; set; }
-    public int unadjustedVolume { get; set; }
-    public float change { get; set; }
-    public float changePercent { get; set; }
-    public float vwap { get; set; }
-    public string label { get; set; }
-    public float changeOverTime { get; set; }
-    public string symbol { get; set; }
-  }
+        public int num_review { get; set; }
+        public List<Review> Review { get; set; }
+    }
 
-  public class ChartRoot
-  {
-    public Quote[] chart { get; set; }
-  }
+    public class Review // Holds review type and ratings
+    {
+        [Key]
+        public int review_id { get; set; }
+        public int reviewer_id { get; set; }
+        public string review_Details { get; set; }
+        public int review_rating { get; set; }
+        public int item_id { get; set; }
+    }
+
+    public class Items_reviewed //Holds Item Details
+    {
+        [Key]
+        public int item_id { get; set; } //Each cuisine will have Unique ID
+        public int type_code { get; set; }
+        public string item_Name { get; set; } //cuisines 
+
+        public string item_desc { get; set; } //type of dish
+        
+    }
+
+    public class ref_item_type
+    {
+        [Key]
+        public int item_code { get; set; }
+        public string item_desc { get; set; } 
+    }
+
+    
 }

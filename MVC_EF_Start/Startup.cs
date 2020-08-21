@@ -8,56 +8,59 @@ using MVC_EF_Start.DataAccess;
 
 namespace MVC_EF_Start
 {
-  public class Startup
-  {
-        public Startup(IConfiguration configuration) => this.configuration = configuration;
-
-        private readonly IConfiguration configuration;
-
-        public IConfiguration GetConfiguration()
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
         {
-            return configuration;
+            Configuration = configuration;
         }
 
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-    {
-      // Setup EF connection
-      services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(GetConfiguration()["Data:IEXTrading:ConnectionString"]));
+        {
+            // Setup EF connection
+            services.AddDbContext<AppDBContext>(options => options.UseSqlServer(Configuration["Data:EF_FoodReviewDB:ConnectionString"]));
+          //services.AddMvc(options => options.EnableEndpointRouting = false);
+            // added from MVC template
+            services.AddMvc();
+        }
 
-      // added from MVC template
-      services.AddMvc();
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+
+
+            //This ensures that the database and tables are created as per the Models.
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<AppDBContext>();
+
+                context.Database.EnsureCreated();
+            }
+
+            if (env.IsDevelopment())
+            {
+                app.UseBrowserLink();
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
+            //app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseStaticFiles();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
     }
-
-    // this is the version from the MVC template
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-    {
-      //This ensures that the database and tables are created as per the Models.
-      using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-      {
-        var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        context.Database.EnsureCreated();
-      }
-
-      if (env.IsDevelopment())
-      {
-        app.UseBrowserLink();
-        app.UseDeveloperExceptionPage();
-      }
-      else
-      {
-        app.UseExceptionHandler("/Home/Error");
-      }
-
-      app.UseStaticFiles();
-
-      app.UseMvc(routes =>
-      {
-        routes.MapRoute(
-            name: "default",
-            template: "{controller=Home}/{action=Index}/{id?}");
-      });
-    }
-  }
 }
